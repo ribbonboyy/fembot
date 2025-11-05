@@ -1,4 +1,4 @@
-from keep_alive import keep_alive  # ✅ imports the keep-alive function
+from keep_alive import keep_alive
 import os
 from dotenv import load_dotenv
 import discord
@@ -36,7 +36,7 @@ femboy_images = [
 
 @bot.event
 async def on_ready():
-    print(f'🌹 logged in as {bot.user}')
+    print(f'logged in as {bot.user}')
 
 @bot.command()
 async def femboy(ctx):
