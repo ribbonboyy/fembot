@@ -64,3 +64,14 @@ async def cat(ctx):
     image = random.choice(cat_images)
     await ctx.send(image)
 
+@bot.event
+async def on_ready():
+    print(f'logged in as {bot.user}')
+
+@bot.command()
+async def femboy(ctx):
+    image = random.choice(femboy_images)
+    await ctx.send(image)
+
+keep_alive()  # ✅ starts the web server thread
+bot.run(TOKEN)
