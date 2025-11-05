@@ -1,25 +1,13 @@
-from flask import Flask
-from threading import Thread
-import discord
-import random
+from keep_alive import keep_alive  # ✅ imports the keep-alive function
 import os
+from dotenv import load_dotenv
+import discord
 from discord.ext import commands
+import random
 
-# --- Flask keep_alive setup ---
-app = Flask('')
+load_dotenv()
+TOKEN = os.getenv("DISCORD_TOKEN")
 
-@app.route('/')
-def home():
-    return "Bot is running!"
-
-def run():
-    app.run(host='0.0.0.0', port=8080)
-
-def keep_alive():
-    t = Thread(target=run)
-    t.start()
-
-# --- Discord bot setup ---
 intents = discord.Intents.default()
 intents.message_content = True
 bot = commands.Bot(command_prefix='.', intents=intents)
@@ -55,6 +43,5 @@ async def femboy(ctx):
     image = random.choice(femboy_images)
     await ctx.send(image)
 
-# --- Run everything ---
-keep_alive()
-bot.run(os.getenv("DISCORD_TOKEN"))
+keep_alive()  # ✅ starts the web server thread
+bot.run(TOKEN)
