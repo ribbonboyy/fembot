@@ -41,6 +41,8 @@ tomboy_images = [
     "https://i.pinimg.com/736x/08/f9/14/08f914e7cd41fc5da8b97178206851d0.jpg"
     "https://preview.redd.it/for-tomboy-tuesday-what-anime-or-manga-do-you-consider-has-v0-d24ojjlfzqmd1.png?width=1080&crop=smart&auto=webp&s=24cc166e830c54373b52beefefafc5ab53591cfd"
     "https://images.squarespace-cdn.com/content/v1/64c41baeb741dd48db90aef0/1701725073241-WV6CM08N6HUH2C9NAFY8/tomo.png"
+    "https://pbs.twimg.com/media/CbpDmZ2UAAAk2ry.jpg"
+    "https://d2bzx2vuetkzse.cloudfront.net/fit-in/0x450/unshoppable_producs/c3f28001-a69b-43e7-a2f5-6eeab24b9b21.jpeg"
 ]
 
 cat_images = [
