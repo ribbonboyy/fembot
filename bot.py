@@ -34,14 +34,33 @@ femboy_images = [
     "https://pm1.aminoapps.com/6925/7dbcdd9a55759f4446e4df1e475147616f966237r1-600-800v2_00.jpg"
 ]
 
-@bot.event
-async def on_ready():
-    print(f'logged in as {bot.user}')
+tomboy_images = [
+    "https://preview.redd.it/who-are-the-best-anime-tomboys-v0-xl8a3dkw01qe1.png?width=450&auto=webp&s=df24c7eb98c0b337bdc817328cbbc6a0fce2d492"
+    "https://photos.yodayo.com/8fefd5ca-9d2d-405d-9e68-e1328e507b9e.png"
+    "https://scontent-prg1-1.xx.fbcdn.net/v/t39.30808-6/480212293_624547870520123_5589541149600627377_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=127cfc&_nc_ohc=E0eNlYhPHk8Q7kNvwFRIIm5&_nc_oc=Adnj8KfHhTEFNJHc7sQTLG4DriyM_xU4sihzrULMRNgdY0D7ar76Ky06K_u3ppNrD4w&_nc_zt=23&_nc_ht=scontent-prg1-1.xx&_nc_gid=OmsiMnZvOdnO65YCzn1Ciw&oh=00_AfgsGArTBZy_ypkZ7rX9fm2YN7WoBN9aKfLa7Tsm5Q55FA&oe=69115F3C"
+    "https://i.pinimg.com/736x/74/78/f3/7478f3e3b99c9174f88e52747990261c.jpg"
+    "https://i.pinimg.com/736x/08/f9/14/08f914e7cd41fc5da8b97178206851d0.jpg"
+    "https://preview.redd.it/for-tomboy-tuesday-what-anime-or-manga-do-you-consider-has-v0-d24ojjlfzqmd1.png?width=1080&crop=smart&auto=webp&s=24cc166e830c54373b52beefefafc5ab53591cfd"
+    "https://images.squarespace-cdn.com/content/v1/64c41baeb741dd48db90aef0/1701725073241-WV6CM08N6HUH2C9NAFY8/tomo.png"
+]
+
+cat_images = [
+    "https://placekitten.com/400/400"
+]
 
 @bot.command()
-async def femboy(ctx):
-    image = random.choice(femboy_images)
+async def tomboy(ctx):
+    if not tomboy_images:
+        await ctx.send("No tomboy images added yet 👀")
+        return
+    image = random.choice(tomboy_images)
     await ctx.send(image)
 
-keep_alive()  # ✅ starts the web server thread
-bot.run(TOKEN)
+@bot.command()
+async def cat(ctx):
+    if not cat_images:
+        await ctx.send("No cat images added yet 🐾")
+        return
+    image = random.choice(cat_images)
+    await ctx.send(image)
+
