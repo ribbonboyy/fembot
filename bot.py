@@ -85,5 +85,5 @@ async def femboy(ctx):
     image = random.choice(femboy_images)
     await ctx.send(image)
 
-keep_alive()  # ✅ starts the web server thread
+keep_alive()  # started web server thread
 bot.run(TOKEN)
