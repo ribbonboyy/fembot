@@ -44,35 +44,32 @@ femboy_images = [
 ]
 
 tomboy_images = [
-    "https://preview.redd.it/who-are-the-best-anime-tomboys-v0-xl8a3dkw01qe1.png?width=450&auto=webp&s=df24c7eb98c0b337bdc817328cbbc6a0fce2d492"
-    "https://photos.yodayo.com/8fefd5ca-9d2d-405d-9e68-e1328e507b9e.png"
-    "https://i.pinimg.com/736x/74/78/f3/7478f3e3b99c9174f88e52747990261c.jpg"
-    "https://i.pinimg.com/736x/08/f9/14/08f914e7cd41fc5da8b97178206851d0.jpg"
-    "https://preview.redd.it/for-tomboy-tuesday-what-anime-or-manga-do-you-consider-has-v0-d24ojjlfzqmd1.png?width=1080&crop=smart&auto=webp&s=24cc166e830c54373b52beefefafc5ab53591cfd"
-    "https://images.squarespace-cdn.com/content/v1/64c41baeb741dd48db90aef0/1701725073241-WV6CM08N6HUH2C9NAFY8/tomo.png"
-    "https://pbs.twimg.com/media/CbpDmZ2UAAAk2ry.jpg"
-    "https://d2bzx2vuetkzse.cloudfront.net/fit-in/0x450/unshoppable_producs/c3f28001-a69b-43e7-a2f5-6eeab24b9b21.jpeg"
+    "https://preview.redd.it/who-are-the-best-anime-tomboys-v0-xl8a3dkw01qe1.png?width=450&auto=webp&s=df24c7eb98c0b337bdc817328cbbc6a0fce2d492",
+    "https://photos.yodayo.com/8fefd5ca-9d2d-405d-9e68-e1328e507b9e.png",
+    "https://i.pinimg.com/736x/74/78/f3/7478f3e3b99c9174f88e52747990261c.jpg",
+    "https://i.pinimg.com/736x/08/f9/14/08f914e7cd41fc5da8b97178206851d0.jpg",
+    "https://preview.redd.it/for-tomboy-tuesday-what-anime-or-manga-do-you-consider-has-v0-d24ojjlfzqmd1.png?width=1080&crop=smart&auto=webp&s=24cc166e830c54373b52beefefafc5ab53591cfd",
+    "https://images.squarespace-cdn.com/content/v1/64c41baeb741dd48db90aef0/1701725073241-WV6CM08N6HUH2C9NAFY8/tomo.png",
+    "https://pbs.twimg.com/media/CbpDmZ2UAAAk2ry.jpg",
+    "https://d2bzx2vuetkzse.cloudfront.net/fit-in/0x450/unshoppable_producs/c3f28001-a69b-43e7-a2f5-6eeab24b9b21.jpeg",
 ]
 
 cat_images = [
-    "https://upload.wikimedia.org/wikipedia/commons/4/4d/Cat_November_2010-1a.jpg"
-    "https://i.guim.co.uk/img/media/327aa3f0c3b8e40ab03b4ae80319064e401c6fbc/377_133_3542_2834/master/3542.jpg?width=1200&height=1200&quality=85&auto=format&fit=crop&s=34d32522f47e4a67286f9894fc81c863"
-    "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Blackcat-Lilith.jpg/250px-Blackcat-Lilith.jpg"
-    "https://www.alleycat.org/wp-content/uploads/2019/03/FELV-cat.jpg"
-    "https://cdn.britannica.com/39/226539-050-D21D7721/Portrait-of-a-cat-with-whiskers-visible.jpg"
-    "https://cdn.mos.cms.futurecdn.net/KHQb3Ny62YxXnCEon4mm43-1920-80.jpg"
-    "https://d2zp5xs5cp8zlg.cloudfront.net/image-79322-800.jpg"
-    "https://www.shutterstock.com/image-vector/anime-cartoon-character-orange-color-600nw-2407945115.jpg"
-    "https://t4.ftcdn.net/jpg/14/62/82/15/360_F_1462821545_cZ2VApsWn2u9xvSr5UwRgDtbGOQUrJXs.jpg"
-    "https://res.cloudinary.com/jerrick/image/upload/d_642250b563292b35f27461a7.png,f_jpg,fl_progressive,q_auto,w_1024/w9bpqfuxrvm99gujxuvi.jpg"
-    "https://t3.ftcdn.net/jpg/06/31/24/68/360_F_631246817_I2rGhvcVeeoJbAbbiH8UotlgIA64xRcL.jpg"
-    "https://otakuusamagazine.com/wp-content/uploads/2023/10/ousa_cat_hero.png"
-    "https://www.petplan.co.uk/cat-insurance/cat-care-and-advice/how-to-keep-senior-cats-active/_jcr_content/root/article_metadata/image.img.jpeg/1752826176607/senior-cat-is-your-older-cat-getting-enough-exercise-.jpeg"
-    "https://media.hswstatic.com/eyJidWNrZXQiOiJjb250ZW50Lmhzd3N0YXRpYy5jb20iLCJrZXkiOiJnaWZcL2dldHR5aW1hZ2VzLTE0MjIzNDI0MDYuanBnIiwiZWRpdHMiOnsicmVzaXplIjp7IndpZHRoIjo4Mjh9fX0="
-    "https://d2zp5xs5cp8zlg.cloudfront.net/image-88409-800.jpg"
-    "https://www.scottishspca.org/wp-content/uploads/2024/09/CATS-INVERNESS-JUNE-24-13-1369x913.jpg"
-    "https://peninsulavet.com.au/wp-content/uploads/2020/10/CAT-CHAT-3.jpg"
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3Lgj4bNP5AiIaqQv4-cVHkPLKVHDGeNRnEw&s"
+    "https://i.guim.co.uk/img/media/327aa3f0c3b8e40ab03b4ae80319064e401c6fbc/377_133_3542_2834/master/3542.jpg?width=1200&height=1200&quality=85&auto=format&fit=crop&s=34d32522f47e4a67286f9894fc81c863",
+    "https://www.alleycat.org/wp-content/uploads/2019/03/FELV-cat.jpg",
+    "https://cdn.britannica.com/39/226539-050-D21D7721/Portrait-of-a-cat-with-whiskers-visible.jpg",
+    "https://cdn.mos.cms.futurecdn.net/KHQb3Ny62YxXnCEon4mm43-1920-80.jpg",
+    "https://d2zp5xs5cp8zlg.cloudfront.net/image-79322-800.jpg",
+    "https://www.shutterstock.com/image-vector/anime-cartoon-character-orange-color-600nw-2407945115.jpg",
+    "https://t4.ftcdn.net/jpg/14/62/82/15/360_F_1462821545_cZ2VApsWn2u9xvSr5UwRgDtbGOQUrJXs.jpg",
+    "https://res.cloudinary.com/jerrick/image/upload/d_642250b563292b35f27461a7.png,f_jpg,fl_progressive,q_auto,w_1024/w9bpqfuxrvm99gujxuvi.jpg",
+    "https://t3.ftcdn.net/jpg/06/31/24/68/360_F_631246817_I2rGhvcVeeoJbAbbiH8UotlgIA64xRcL.jpg",
+    "https://otakuusamagazine.com/wp-content/uploads/2023/10/ousa_cat_hero.png",
+    "https://media.hswstatic.com/eyJidWNrZXQiOiJjb250ZW50Lmhzd3N0YXRpYy5jb20iLCJrZXkiOiJnaWZcL2dldHR5aW1hZ2VzLTE0MjIzNDI0MDYuanBnIiwiZWRpdHMiOnsicmVzaXplIjp7IndpZHRoIjo4Mjh9fX0=",
+    "https://d2zp5xs5cp8zlg.cloudfront.net/image-88409-800.jpg",
+    "https://www.scottishspca.org/wp-content/uploads/2024/09/CATS-INVERNESS-JUNE-24-13-1369x913.jpg",
+    "https://peninsulavet.com.au/wp-content/uploads/2020/10/CAT-CHAT-3.jpg",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3Lgj4bNP5AiIaqQv4-cVHkPLKVHDGeNRnEw&s",
 ]
 
 @bot.event
