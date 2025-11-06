@@ -4,6 +4,12 @@ from dotenv import load_dotenv
 import discord
 from discord.ext import commands
 import random
+from pymongo import MongoClient
+import os
+
+mongo_uri = os.getenv("MONGO_URI")
+client = MongoClient(mongo_uri)
+db = client["fembot"]
 
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
