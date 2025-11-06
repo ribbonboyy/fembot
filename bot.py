@@ -1,3 +1,6 @@
+import os
+print("MONGO_URI exists:", "✅" if os.getenv("MONGO_URI") else "❌")
+
 from keep_alive import keep_alive
 import os
 from dotenv import load_dotenv
