@@ -91,5 +91,18 @@ async def femboy(ctx):
     image = random.choice(femboy_images)
     await ctx.send(image)
 
+@bot.command()
+async def dice(ctx, sides: int = 6):
+    await ctx.send(f"🎲 You rolled a {random.randint(1, sides)} (1-{sides})")
+
+@bot.command()
+async def eightball(ctx, *, question):
+    responses = [
+        "Yes.", "No.", "Maybe.", "Definitely!", "Absolutely not.", 
+        "Ask again later.", "I have no idea.", "Sure!", "Unlikely."
+    ]
+    await ctx.send(f"🎱 Question: {question}\nAnswer: {random.choice(responses)}")
+
+
 keep_alive()  # started web server thread
 bot.run(TOKEN)
