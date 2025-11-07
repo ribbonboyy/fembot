@@ -103,6 +103,11 @@ async def eightball(ctx, *, question):
     ]
     await ctx.send(f"🎱 Question: {question}\nAnswer: {random.choice(responses)}")
 
+@bot.command()
+async def testdb(ctx):
+    db.test.insert_one({"user": str(ctx.author), "test": "ok"})
+    await ctx.send("✅ Database connection works!")
+
 
 keep_alive()  # started web server thread
 bot.run(TOKEN)
