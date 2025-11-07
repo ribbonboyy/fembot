@@ -123,7 +123,6 @@ async def testdb(ctx):
         color=discord.Color.green()
     )
     await ctx.send(embed=embed)
-keep_alive() # started web server thread
 
 @bot.command()
 async def balance(ctx):
