@@ -1,26 +1,52 @@
 import os
-print("MONGO_URI exists:", "✅" if os.getenv("MONGO_URI") else "❌")
-
-from keep_alive import keep_alive
-import os
-from dotenv import load_dotenv
+import random
 import discord
 from discord.ext import commands
-import random
 from pymongo import MongoClient
-import os
+from keep_alive import keep_alive
 
+# --- MongoDB setup ---
 mongo_uri = os.getenv("MONGO_URI")
-client = MongoClient(mongo_uri)
-db = client["fembot"]
+if not mongo_uri:
+    print("❌ MONGO_URI not found in environment variables.")
+else:
+    print("✅ MONGO_URI loaded.")
 
-load_dotenv()
+try:
+    client = MongoClient(mongo_uri)
+    client.admin.command("ping")
+    print("✅ Connected to MongoDB")
+    db = client["fembot"]
+except Exception as e:
+    print("❌ MongoDB connection failed:", e)
+    db = None
+
+# --- Discord setup ---
 TOKEN = os.getenv("DISCORD_TOKEN")
+if not TOKEN:
+    print("❌ DISCORD_TOKEN not found in environment variables.")
 
 intents = discord.Intents.default()
 intents.message_content = True
 bot = commands.Bot(command_prefix='.', intents=intents)
 
+# --- Database helper functions ---
+def get_balance(user_id):
+    if not db:
+        return 0
+    user = db.users.find_one({"_id": user_id})
+    return user["balance"] if user else 0
+
+def update_balance(user_id, amount):
+    if not db:
+        return
+    db.users.update_one(
+        {"_id": user_id},
+        {"$inc": {"balance": amount}},
+        upsert=True
+    )
+
+# --- Image lists ---
 femboy_images = [
     "https://images.steamusercontent.com/ugc/1005933590987309852/F0BD73B0E6B73AA12C9228B3F29AA11FB266CC78/?imw=512&&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false",
     "https://images.steamusercontent.com/ugc/1656726094523869119/665C09AAA721675E6ECEA78936140BEA0AFF91B3/?imw=5000&imh=5000&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false",
@@ -72,24 +98,23 @@ cat_images = [
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3Lgj4bNP5AiIaqQv4-cVHkPLKVHDGeNRnEw&s",
 ]
 
+# --- Events ---
 @bot.event
 async def on_ready():
-    print(f'logged in as {bot.user}')
+    print(f"✅ Logged in as {bot.user}")
 
+# --- Commands ---
 @bot.command()
 async def tomboy(ctx):
-    image = random.choice(tomboy_images)
-    await ctx.send(image)
+    await ctx.send(random.choice(tomboy_images))
 
 @bot.command()
 async def cat(ctx):
-    image = random.choice(cat_images)
-    await ctx.send(image)
+    await ctx.send(random.choice(cat_images))
 
 @bot.command()
 async def femboy(ctx):
-    image = random.choice(femboy_images)
-    await ctx.send(image)
+    await ctx.send(random.choice(femboy_images))
 
 @bot.command()
 async def dice(ctx, sides: int = 6):
@@ -104,7 +129,7 @@ async def dice(ctx, sides: int = 6):
 @bot.command()
 async def eightball(ctx, *, question):
     responses = [
-        "Yes.", "No.", "Maybe.", "Definitely!", "Absolutely not.", 
+        "Yes.", "No.", "Maybe.", "Definitely!", "Absolutely not.",
         "Ask again later.", "I have no idea.", "Sure!", "Unlikely."
     ]
     embed = discord.Embed(
@@ -116,6 +141,9 @@ async def eightball(ctx, *, question):
 
 @bot.command()
 async def testdb(ctx):
+    if not db:
+        await ctx.send("❌ Database not connected.")
+        return
     db.test.insert_one({"user": str(ctx.author), "test": "ok"})
     embed = discord.Embed(
         title="✅ Database Test",
@@ -192,6 +220,9 @@ async def coinflip(ctx, amount: int):
 
 @bot.command()
 async def leaderboard(ctx):
+    if not db:
+        await ctx.send("❌ Database not connected.")
+        return
     top_users = db.users.find().sort("balance", -1).limit(10)
     embed = discord.Embed(
         title="🏆 Leaderboard",
@@ -213,5 +244,7 @@ async def leaderboard(ctx):
         embed.description = "No data yet!"
     await ctx.send(embed=embed)
 
+# --- Start the bot ---
 keep_alive()
 bot.run(TOKEN)
+
