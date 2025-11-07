@@ -93,7 +93,13 @@ async def femboy(ctx):
 
 @bot.command()
 async def dice(ctx, sides: int = 6):
-    await ctx.send(f"🎲 You rolled a {random.randint(1, sides)} (1-{sides})")
+    result = random.randint(1, sides)
+    embed = discord.Embed(
+        title="🎲 Dice Roll",
+        description=f"You rolled a **{result}** *(1-{sides})*",
+        color=discord.Color.blurple()
+    )
+    await ctx.send(embed=embed)
 
 @bot.command()
 async def eightball(ctx, *, question):
@@ -101,80 +107,111 @@ async def eightball(ctx, *, question):
         "Yes.", "No.", "Maybe.", "Definitely!", "Absolutely not.", 
         "Ask again later.", "I have no idea.", "Sure!", "Unlikely."
     ]
-    await ctx.send(f"🎱 Question: {question}\nAnswer: {random.choice(responses)}")
+    embed = discord.Embed(
+        title="🎱 Magic 8-Ball",
+        description=f"**Question:** {question}\n**Answer:** {random.choice(responses)}",
+        color=discord.Color.purple()
+    )
+    await ctx.send(embed=embed)
 
 @bot.command()
 async def testdb(ctx):
     db.test.insert_one({"user": str(ctx.author), "test": "ok"})
-    await ctx.send("✅ Database connection works!")
-
-
-keep_alive()  # started web server thread
-# ===== Economy System =====
-
-# Helper: Get or create a user's balance
-def get_balance(user_id):
-    user = db.users.find_one({"_id": user_id})
-    if not user:
-        user = {"_id": user_id, "balance": 0}
-        db.users.insert_one(user)
-    return user["balance"]
-
-# Helper: Update balance by amount (+ or -)
-def update_balance(user_id, amount):
-    db.users.update_one({"_id": user_id}, {"$inc": {"balance": amount}}, upsert=True)
+    embed = discord.Embed(
+        title="✅ Database Test",
+        description="Database connection works!",
+        color=discord.Color.green()
+    )
+    await ctx.send(embed=embed)
+keep_alive() # started web server thread
 
 @bot.command()
 async def balance(ctx):
-    """Check your balance."""
     bal = get_balance(ctx.author.id)
-    await ctx.send(f"{ctx.author.mention}, you have 💰 {bal} coins.")
+    embed = discord.Embed(
+        title="💰 Balance",
+        description=f"{ctx.author.mention}, you have **{bal} coins**.",
+        color=discord.Color.gold()
+    )
+    await ctx.send(embed=embed)
 
 @bot.command()
-@commands.cooldown(1, 60, commands.BucketType.user)  # 1 use per 60 seconds
+@commands.cooldown(1, 60, commands.BucketType.user)
 async def work(ctx):
-    """Earn money by working."""
     amount = random.randint(100, 500)
     update_balance(ctx.author.id, amount)
-    await ctx.send(f"💼 {ctx.author.mention} worked hard and earned {amount} coins!")
+    embed = discord.Embed(
+        title="💼 Work",
+        description=f"{ctx.author.mention} worked hard and earned **{amount} coins!**",
+        color=discord.Color.green()
+    )
+    await ctx.send(embed=embed)
 
 @bot.command()
-@commands.cooldown(1, 30, commands.BucketType.user)  # 1 use per 30 seconds
+@commands.cooldown(1, 30, commands.BucketType.user)
 async def beg(ctx):
-    """Beg for a small amount of money."""
     amount = random.randint(1, 50)
     update_balance(ctx.author.id, amount)
-    await ctx.send(f"🪙 {ctx.author.mention} begged and got {amount} coins.")
+    embed = discord.Embed(
+        title="🪙 Begging",
+        description=f"{ctx.author.mention} begged and got **{amount} coins.**",
+        color=discord.Color.orange()
+    )
+    await ctx.send(embed=embed)
 
 @bot.command()
 async def coinflip(ctx, amount: int):
-    """Flip a coin to double or lose your bet."""
     bal = get_balance(ctx.author.id)
 
     if amount <= 0:
-        return await ctx.send("❌ You must bet more than 0 coins.")
+        return await ctx.send(embed=discord.Embed(
+            description="❌ You must bet more than 0 coins.",
+            color=discord.Color.red()
+        ))
     if bal < amount:
-        return await ctx.send("❌ You don’t have enough coins to bet that much.")
+        return await ctx.send(embed=discord.Embed(
+            description="❌ You don’t have enough coins to bet that much.",
+            color=discord.Color.red()
+        ))
 
     result = random.choice(["win", "lose"])
     if result == "win":
         update_balance(ctx.author.id, amount)
-        await ctx.send(f"🪙 {ctx.author.mention} flipped heads and won {amount} coins! 🎉")
+        embed = discord.Embed(
+            title="🪙 Coinflip",
+            description=f"{ctx.author.mention} flipped heads and **won {amount} coins! 🎉**",
+            color=discord.Color.green()
+        )
     else:
         update_balance(ctx.author.id, -amount)
-        await ctx.send(f"💀 {ctx.author.mention} flipped tails and lost {amount} coins.")
+        embed = discord.Embed(
+            title="💀 Coinflip",
+            description=f"{ctx.author.mention} flipped tails and **lost {amount} coins.**",
+            color=discord.Color.red()
+        )
+    await ctx.send(embed=embed)
 
 @bot.command()
 async def leaderboard(ctx):
-    """Show the richest users."""
     top_users = db.users.find().sort("balance", -1).limit(10)
-    leaderboard_text = "**🏆 Leaderboard 🏆**\n\n"
+    embed = discord.Embed(
+        title="🏆 Leaderboard",
+        color=discord.Color.gold()
+    )
+
     rank = 1
     for user in top_users:
         member = ctx.guild.get_member(user["_id"])
         name = member.name if member else "Unknown User"
-        leaderboard_text += f"{rank}. {name} — 💰 {user['balance']} coins\n"
+        embed.add_field(
+            name=f"#{rank} {name}",
+            value=f"💰 {user['balance']} coins",
+            inline=False
+        )
         rank += 1
 
-    await ctx.send(leaderboard_text or "No data yet!")
+    if rank == 1:
+        embed.description = "No data yet!"
+    await ctx.send(embed=embed)
+
 bot.run(TOKEN)
