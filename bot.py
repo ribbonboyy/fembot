@@ -213,4 +213,5 @@ async def leaderboard(ctx):
         embed.description = "No data yet!"
     await ctx.send(embed=embed)
 
+keep_alive()
 bot.run(TOKEN)
