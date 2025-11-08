@@ -126,17 +126,24 @@ async def coinflip(ctx, amount: int):
 
 @bot.command()
 async def leaderboard(ctx):
-    """Show the richest users."""
     top_users = db.users.find().sort("balance", -1).limit(10)
-    leaderboard_text = "**🏆 Leaderboard 🏆**\n\n"
+    embed = discord.Embed(title="🏆 Leaderboard", color=discord.Color.blurple())
+
     rank = 1
     for user in top_users:
-        member = ctx.guild.get_member(user["_id"])
-        name = member.name if member else "Unknown User"
-        leaderboard_text += f"{rank}. {name} — 💰 {user['balance']} coins\n"
-        rank += 1
+        try:
+            member = ctx.guild.get_member(int(user["_id"]))
+            name = member.name if member else f"Unknown User"
+            embed.add_field(
+                name=f"#{rank} {name}",
+                value=f"💰 {user['balance']} coins",
+                inline=False
+            )
+            rank += 1
+        except Exception as e:
+            print(f"Error in leaderboard for user {user['_id']}: {e}")
 
-    await ctx.send(leaderboard_text or "No data yet!")
+    await ctx.send(embed=embed)
 
 # ===== Run Bot =====
 keep_alive()
