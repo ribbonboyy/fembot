@@ -1,109 +1,50 @@
 import os
 import random
+from dotenv import load_dotenv
 import discord
 from discord.ext import commands
 from pymongo import MongoClient
 from keep_alive import keep_alive
 
-# --- MongoDB setup ---
+# ===== Load Environment =====
+load_dotenv()
+print("MONGO_URI exists:", "✅" if os.getenv("MONGO_URI") else "❌")
+
 mongo_uri = os.getenv("MONGO_URI")
-if not mongo_uri:
-    print("❌ MONGO_URI not found in environment variables.")
-else:
-    print("✅ MONGO_URI loaded.")
+client = MongoClient(mongo_uri)
+db = client["fembot"]
 
-try:
-    client = MongoClient(mongo_uri)
-    client.admin.command("ping")
-    print("✅ Connected to MongoDB")
-    db = client["fembot"]
-except Exception as e:
-    print("❌ MongoDB connection failed:", e)
-    db = None
-
-# --- Discord setup ---
 TOKEN = os.getenv("DISCORD_TOKEN")
-if not TOKEN:
-    print("❌ DISCORD_TOKEN not found in environment variables.")
 
 intents = discord.Intents.default()
 intents.message_content = True
 bot = commands.Bot(command_prefix='.', intents=intents)
 
-# --- Database helper functions ---
-def get_balance(user_id):
-    if not db:
-        return 0
-    user = db.users.find_one({"_id": user_id})
-    return user["balance"] if user else 0
-
-def update_balance(user_id, amount):
-    if not db:
-        return
-    db.users.update_one(
-        {"_id": user_id},
-        {"$inc": {"balance": amount}},
-        upsert=True
-    )
-
-# --- Image lists ---
+# ===== Images =====
 femboy_images = [
     "https://images.steamusercontent.com/ugc/1005933590987309852/F0BD73B0E6B73AA12C9228B3F29AA11FB266CC78/?imw=512&&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false",
     "https://images.steamusercontent.com/ugc/1656726094523869119/665C09AAA721675E6ECEA78936140BEA0AFF91B3/?imw=5000&imh=5000&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false",
     "https://megamousearts.com/wp-content/uploads/2023/09/IMG-8124.jpg",
-    "https://m.media-amazon.com/images/I/71CtyelU49L._AC_SL1000_.jpg",
-    "https://img.joomcdn.net/4f0e00c8729bf91826536b4bfb000d6c649510f9_original.jpeg",
-    "https://shapes.inc/api/public/avatar/astolfo-i84c",
-    "https://pm1.aminoapps.com/6953/654c038410caf42e5cc8c7a9967ab9dbe1600c94r1-369-512v2_00.jpg",
-    "https://static.wikia.nocookie.net/aesthetics/images/e/e8/Femboy_castiel_onyx.jpg/revision/latest?cb=20230730190533",
-    "https://i.redd.it/4enjtq4ga5sd1.jpeg",
-    "https://images.uncyclomedia.co/necyklopedie/cs/thumb/5/5a/Femboy_ve_sv%C3%A9_p%C5%99irozen%C3%A9_srsti.jpeg/640px-Femboy_ve_sv%C3%A9_p%C5%99irozen%C3%A9_srsti.jpeg",
-    "https://api.fstik.app/file/CAACAgIAAxUAAWkGsHYY_WuQp19IPozY4AUTbH5mAAKdawACMKhxS5VNgiDouwHhNgQ/sticker.webp",
-    "https://static.wikia.nocookie.net/topstrongest/images/6/67/Ferris_Character_Art.png/revision/latest?cb=20170207024549",
-    "https://i.pinimg.com/736x/c2/24/0d/c2240d74ef1d1b0505fae3fbfc9928c5.jpg",
-    "https://i.redd.it/2ec98og6rsna1.png",
-    "https://files.shapes.inc/api/files/avatar_13b581ef-5820-48e4-bbf9-8884e7581ac9.png",
-    "https://a.allegroimg.com/original/11d03d/08cea9b94c5487e9eadeb6b3801c/Plakat-A3-Re-Zero-Anime-Manga-Felix-Argyle",
-    "https://preview.redd.it/happy-birthday-to-me-v0-cgf32gwrzznf1.jpeg?width=640&crop=smart&auto=webp&s=0e3243114be09b05c51f36f6a51f7feb1bd3955d",
-    "https://images7.alphacoders.com/858/858728.jpg",
-    "https://pm1.aminoapps.com/6925/7dbcdd9a55759f4446e4df1e475147616f966237r1-600-800v2_00.jpg"
 ]
 
 tomboy_images = [
     "https://preview.redd.it/who-are-the-best-anime-tomboys-v0-xl8a3dkw01qe1.png?width=450&auto=webp&s=df24c7eb98c0b337bdc817328cbbc6a0fce2d492",
     "https://photos.yodayo.com/8fefd5ca-9d2d-405d-9e68-e1328e507b9e.png",
     "https://i.pinimg.com/736x/74/78/f3/7478f3e3b99c9174f88e52747990261c.jpg",
-    "https://i.pinimg.com/736x/08/f9/14/08f914e7cd41fc5da8b97178206851d0.jpg",
-    "https://preview.redd.it/for-tomboy-tuesday-what-anime-or-manga-do-you-consider-has-v0-d24ojjlfzqmd1.png?width=1080&crop=smart&auto=webp&s=24cc166e830c54373b52beefefafc5ab53591cfd",
-    "https://images.squarespace-cdn.com/content/v1/64c41baeb741dd48db90aef0/1701725073241-WV6CM08N6HUH2C9NAFY8/tomo.png",
-    "https://pbs.twimg.com/media/CbpDmZ2UAAAk2ry.jpg",
-    "https://d2bzx2vuetkzse.cloudfront.net/fit-in/0x450/unshoppable_producs/c3f28001-a69b-43e7-a2f5-6eeab24b9b21.jpeg",
 ]
 
 cat_images = [
     "https://i.guim.co.uk/img/media/327aa3f0c3b8e40ab03b4ae80319064e401c6fbc/377_133_3542_2834/master/3542.jpg?width=1200&height=1200&quality=85&auto=format&fit=crop&s=34d32522f47e4a67286f9894fc81c863",
     "https://www.alleycat.org/wp-content/uploads/2019/03/FELV-cat.jpg",
     "https://cdn.britannica.com/39/226539-050-D21D7721/Portrait-of-a-cat-with-whiskers-visible.jpg",
-    "https://cdn.mos.cms.futurecdn.net/KHQb3Ny62YxXnCEon4mm43-1920-80.jpg",
-    "https://d2zp5xs5cp8zlg.cloudfront.net/image-79322-800.jpg",
-    "https://www.shutterstock.com/image-vector/anime-cartoon-character-orange-color-600nw-2407945115.jpg",
-    "https://t4.ftcdn.net/jpg/14/62/82/15/360_F_1462821545_cZ2VApsWn2u9xvSr5UwRgDtbGOQUrJXs.jpg",
-    "https://res.cloudinary.com/jerrick/image/upload/d_642250b563292b35f27461a7.png,f_jpg,fl_progressive,q_auto,w_1024/w9bpqfuxrvm99gujxuvi.jpg",
-    "https://t3.ftcdn.net/jpg/06/31/24/68/360_F_631246817_I2rGhvcVeeoJbAbbiH8UotlgIA64xRcL.jpg",
-    "https://otakuusamagazine.com/wp-content/uploads/2023/10/ousa_cat_hero.png",
-    "https://media.hswstatic.com/eyJidWNrZXQiOiJjb250ZW50Lmhzd3N0YXRpYy5jb20iLCJrZXkiOiJnaWZcL2dldHR5aW1hZ2VzLTE0MjIzNDI0MDYuanBnIiwiZWRpdHMiOnsicmVzaXplIjp7IndpZHRoIjo4Mjh9fX0=",
-    "https://d2zp5xs5cp8zlg.cloudfront.net/image-88409-800.jpg",
-    "https://www.scottishspca.org/wp-content/uploads/2024/09/CATS-INVERNESS-JUNE-24-13-1369x913.jpg",
-    "https://peninsulavet.com.au/wp-content/uploads/2020/10/CAT-CHAT-3.jpg",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3Lgj4bNP5AiIaqQv4-cVHkPLKVHDGeNRnEw&s",
 ]
 
-# --- Events ---
+# ===== Bot Events =====
 @bot.event
 async def on_ready():
-    print(f"✅ Logged in as {bot.user}")
+    print(f'logged in as {bot.user}')
 
-# --- Commands ---
+# ===== Image Commands =====
 @bot.command()
 async def tomboy(ctx):
     await ctx.send(random.choice(tomboy_images))
@@ -116,15 +57,10 @@ async def cat(ctx):
 async def femboy(ctx):
     await ctx.send(random.choice(femboy_images))
 
+# ===== Fun Commands =====
 @bot.command()
 async def dice(ctx, sides: int = 6):
-    result = random.randint(1, sides)
-    embed = discord.Embed(
-        title="🎲 Dice Roll",
-        description=f"You rolled a **{result}** *(1-{sides})*",
-        color=discord.Color.blurple()
-    )
-    await ctx.send(embed=embed)
+    await ctx.send(f"🎲 You rolled a {random.randint(1, sides)} (1-{sides})")
 
 @bot.command()
 async def eightball(ctx, *, question):
@@ -132,119 +68,77 @@ async def eightball(ctx, *, question):
         "Yes.", "No.", "Maybe.", "Definitely!", "Absolutely not.",
         "Ask again later.", "I have no idea.", "Sure!", "Unlikely."
     ]
-    embed = discord.Embed(
-        title="🎱 Magic 8-Ball",
-        description=f"**Question:** {question}\n**Answer:** {random.choice(responses)}",
-        color=discord.Color.purple()
-    )
-    await ctx.send(embed=embed)
+    await ctx.send(f"🎱 Question: {question}\nAnswer: {random.choice(responses)}")
 
-@bot.command()
-async def testdb(ctx):
-    if not db:
-        await ctx.send("❌ Database not connected.")
-        return
-    db.test.insert_one({"user": str(ctx.author), "test": "ok"})
-    embed = discord.Embed(
-        title="✅ Database Test",
-        description="Database connection works!",
-        color=discord.Color.green()
-    )
-    await ctx.send(embed=embed)
+# ===== Economy System =====
+
+# Helper: Get or create a user's balance
+def get_balance(user_id):
+    user = db.users.find_one({"_id": user_id})
+    if not user:
+        user = {"_id": user_id, "balance": 0}
+        db.users.insert_one(user)
+    return user["balance"]
+
+# Helper: Update balance by amount (+ or -)
+def update_balance(user_id, amount):
+    db.users.update_one({"_id": user_id}, {"$inc": {"balance": amount}}, upsert=True)
 
 @bot.command()
 async def balance(ctx):
+    """Check your balance."""
     bal = get_balance(ctx.author.id)
-    embed = discord.Embed(
-        title="💰 Balance",
-        description=f"{ctx.author.mention}, you have **{bal} coins**.",
-        color=discord.Color.gold()
-    )
-    await ctx.send(embed=embed)
+    await ctx.send(f"{ctx.author.mention}, you have 💰 {bal} coins.")
 
 @bot.command()
 @commands.cooldown(1, 60, commands.BucketType.user)
 async def work(ctx):
+    """Earn money by working."""
     amount = random.randint(100, 500)
     update_balance(ctx.author.id, amount)
-    embed = discord.Embed(
-        title="💼 Work",
-        description=f"{ctx.author.mention} worked hard and earned **{amount} coins!**",
-        color=discord.Color.green()
-    )
-    await ctx.send(embed=embed)
+    await ctx.send(f"💼 {ctx.author.mention} worked hard and earned {amount} coins!")
 
 @bot.command()
 @commands.cooldown(1, 30, commands.BucketType.user)
 async def beg(ctx):
+    """Beg for a small amount of money."""
     amount = random.randint(1, 50)
     update_balance(ctx.author.id, amount)
-    embed = discord.Embed(
-        title="🪙 Begging",
-        description=f"{ctx.author.mention} begged and got **{amount} coins.**",
-        color=discord.Color.orange()
-    )
-    await ctx.send(embed=embed)
+    await ctx.send(f"🪙 {ctx.author.mention} begged and got {amount} coins.")
 
 @bot.command()
 async def coinflip(ctx, amount: int):
+    """Flip a coin to double or lose your bet."""
     bal = get_balance(ctx.author.id)
 
     if amount <= 0:
-        return await ctx.send(embed=discord.Embed(
-            description="❌ You must bet more than 0 coins.",
-            color=discord.Color.red()
-        ))
+        return await ctx.send("❌ You must bet more than 0 coins.")
     if bal < amount:
-        return await ctx.send(embed=discord.Embed(
-            description="❌ You don’t have enough coins to bet that much.",
-            color=discord.Color.red()
-        ))
+        return await ctx.send("❌ You don’t have enough coins to bet that much.")
 
     result = random.choice(["win", "lose"])
     if result == "win":
         update_balance(ctx.author.id, amount)
-        embed = discord.Embed(
-            title="🪙 Coinflip",
-            description=f"{ctx.author.mention} flipped heads and **won {amount} coins! 🎉**",
-            color=discord.Color.green()
-        )
+        await ctx.send(f"🪙 {ctx.author.mention} flipped heads and won {amount} coins! 🎉")
     else:
         update_balance(ctx.author.id, -amount)
-        embed = discord.Embed(
-            title="💀 Coinflip",
-            description=f"{ctx.author.mention} flipped tails and **lost {amount} coins.**",
-            color=discord.Color.red()
-        )
-    await ctx.send(embed=embed)
+        await ctx.send(f"💀 {ctx.author.mention} flipped tails and lost {amount} coins.")
 
 @bot.command()
 async def leaderboard(ctx):
-    if not db:
-        await ctx.send("❌ Database not connected.")
-        return
+    """Show the richest users."""
     top_users = db.users.find().sort("balance", -1).limit(10)
-    embed = discord.Embed(
-        title="🏆 Leaderboard",
-        color=discord.Color.gold()
-    )
-
+    leaderboard_text = "**🏆 Leaderboard 🏆**\n\n"
     rank = 1
     for user in top_users:
         member = ctx.guild.get_member(user["_id"])
         name = member.name if member else "Unknown User"
-        embed.add_field(
-            name=f"#{rank} {name}",
-            value=f"💰 {user['balance']} coins",
-            inline=False
-        )
+        leaderboard_text += f"{rank}. {name} — 💰 {user['balance']} coins\n"
         rank += 1
 
-    if rank == 1:
-        embed.description = "No data yet!"
-    await ctx.send(embed=embed)
+    await ctx.send(leaderboard_text or "No data yet!")
 
-# --- Start the bot ---
+# ===== Run Bot =====
 keep_alive()
 bot.run(TOKEN)
 
